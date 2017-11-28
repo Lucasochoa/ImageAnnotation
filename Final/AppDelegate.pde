@@ -1,6 +1,6 @@
 class AppDelegate{
-  private annotatedCaptures ArrayList<PhotoCapture>;
-  width, height int;
+  private ArrayList<PhotoCapture> annotatedCaptures;
+  int width, height;
 //contstructor
   AppDelegate(){
     annotatedCaptures = new ArrayList<PhotoCapture>();

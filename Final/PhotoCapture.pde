@@ -1,9 +1,13 @@
 class PhotoCapture{
-  private image PImage;
-  definedObjects ArrayList <UserDefinedObject>;
+  private PImage image;
+  ArrayList <UserDefinedObject> definedObjects;
 //constructors
   PhotoCapture(){
     image = null;
+    definedObjects = new ArrayList<UserDefinedObject>();
+  }
+  PhotoCapture(PImage p){
+    this.image = p;
     definedObjects = new ArrayList<UserDefinedObject>();
   }
 //getters and setters
@@ -15,9 +19,12 @@ class PhotoCapture{
   }
 
   void cleanImage(){
-    for (int i = 0; i < definedObjects.size(), i++){
-      definedObjects[i] = null;
+    for (int i = 0; i < definedObjects.size(); i++){
+      //definedObjects[i] = null;
     }
+  }
+  public void draw(){
+    image(this.image,0,0);
   }
 
 }

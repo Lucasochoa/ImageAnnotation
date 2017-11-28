@@ -1,7 +1,7 @@
 class Relationship{
 //members
-  preposition String;
-  object UserDefinedObject;
+  String preposition;
+  UserDefinedObject object;
 //constructors
   Relationship(){
     preposition = null;
@@ -19,10 +19,10 @@ class Relationship{
   }
 //getters and setters
   String getPreposition(){
-    return this.preposition
+    return this.preposition;
   }
   void setPreposition(String s){
-    this.preposition s;
+    this.preposition = s;
   }
   UserDefinedObject getObject(){
     return this.object;

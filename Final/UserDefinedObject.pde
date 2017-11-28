@@ -1,22 +1,23 @@
 class UserDefinedObject{
 //members
-  private title String;
-  relationships ArrayList<Relationship>;
-  points ArrayList<PVector>;
+  private String title;
+  ArrayList<Relationship> relationships;
+  ArrayList<PVector> points;
 //constructors
   UserDefinedObject(){
     this.title = null;
     relationships = new ArrayList<Relationship>();
-    points = new Arraylist<PVector>();
+    points = new ArrayList<PVector>();
   }
+
   UserDefinedObject(String title){
     this.title = title;
     relationships = new ArrayList<Relationship>();
-    points = new Arraylist<PVector>();
+    points = new ArrayList<PVector>();
   }
 //getters and setters
   String getTitle(){
-    return this.title
+    return this.title;
   }
   void setTitle(String title){
     this.title = title;
