@@ -16,22 +16,39 @@ public class Final extends PApplet {
 
 AppDelegate app;
 PhotoCapture photoCapture1;
+UserDefinedObject tempObj;
 PImage photo1;
 PImage photo2;
 PImage photo3;
 
+int w,h;
+
 public void setup(){
-  photo1 = loadImage("images/photo1.png");
-  photoCapture1 = new PhotoCapture();
-  photoCapture1.setImage(photo1);
-
-
-  //app = new AppDelegate();
   
-
+  tempLoadImage();
+  tempLoadObj();
+  photoCapture1.definedObjects.add(tempObj);
+  //app = new AppDelegate()
 }
 public void draw(){
   photoCapture1.draw();
+}
+
+public void tempLoadObj(){
+  tempObj = new UserDefinedObject("henry");
+}
+
+public void tempLoadImage(){
+  photo1 = loadImage("images/photo1.png");
+  photo1.resize(400,700);
+  photoCapture1 = new PhotoCapture();
+  photoCapture1.setImage(photo1);
+}
+
+public void mouseClicked() {
+  tempObj.points.add(new PVector(mouseX,mouseY));
+  println(tempObj.points);
+  //game.mouseDragged(mouseX, mouseY);
 }
 class AppDelegate{
   private ArrayList<PhotoCapture> annotatedCaptures;
@@ -70,11 +87,14 @@ class PhotoCapture{
 
   public void cleanImage(){
     for (int i = 0; i < definedObjects.size(); i++){
-      //definedObjects[i] = null;
+      definedObjects.clear();
     }
   }
   public void draw(){
     image(this.image,0,0);
+    for (UserDefinedObject o : definedObjects){
+      o.draw();
+    }
   }
 
 }
@@ -135,15 +155,16 @@ class UserDefinedObject{
   public void setTitle(String title){
     this.title = title;
   }
-  // void addRelationship(Relationship r){
-  //   relationships.add(r);
-  // }
-  // void addPoint(PVector p){
-  //   points.add(p);
-  //}
+  public void draw(){
+    for (PVector p: this.points){
+        //fill(255,0,0);
+        noFill();
+        ellipse(p.x,p.y,20,20);
+    }
+  }
 
 }
-  public void settings() {  size(300,400); }
+  public void settings() {  size(400,700); }
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "Final" };
     if (passedArgs != null) {

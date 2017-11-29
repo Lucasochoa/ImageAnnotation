@@ -22,11 +22,12 @@ class UserDefinedObject{
   void setTitle(String title){
     this.title = title;
   }
-  // void addRelationship(Relationship r){
-  //   relationships.add(r);
-  // }
-  // void addPoint(PVector p){
-  //   points.add(p);
-  //}
+  public void draw(){
+    for (PVector p: this.points){
+        //fill(255,0,0);
+        noFill();
+        ellipse(p.x,p.y,20,20);
+    }
+  }
 
 }

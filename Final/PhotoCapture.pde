@@ -20,11 +20,14 @@ class PhotoCapture{
 
   void cleanImage(){
     for (int i = 0; i < definedObjects.size(); i++){
-      //definedObjects[i] = null;
+      definedObjects.clear();
     }
   }
   public void draw(){
     image(this.image,0,0);
+    for (UserDefinedObject o : definedObjects){
+      o.draw();
+    }
   }
 
 }
