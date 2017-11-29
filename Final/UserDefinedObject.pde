@@ -23,11 +23,17 @@ class UserDefinedObject{
     this.title = title;
   }
   public void draw(){
-    for (PVector p: this.points){
-        //fill(255,0,0);
+
+      for (int i = 0; i < points.size(); i++){
+        PVector p = points.get(i);
+        PVector p2 = points.get(i);
+        if(i != points.size() -1){
+            p2 = points.get(i+1);
+        }
         noFill();
         ellipse(p.x,p.y,20,20);
-    }
+        line(p.x,p.y,p2.x,p2.y);
+      }
   }
 
 }
