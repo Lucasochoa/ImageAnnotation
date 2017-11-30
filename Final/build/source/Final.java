@@ -27,7 +27,7 @@ public void setup(){
   
   tempLoadImage();
   tempLoadObj();
-  photoCapture1.definedObjects.add(tempObj);
+
   //app = new AppDelegate()
 }
 public void draw(){
@@ -36,6 +36,7 @@ public void draw(){
 
 public void tempLoadObj(){
   tempObj = new UserDefinedObject("henry");
+  photoCapture1.definedObjects.add(tempObj);
 }
 
 public void tempLoadImage(){
@@ -45,8 +46,15 @@ public void tempLoadImage(){
   photoCapture1.setImage(photo1);
 }
 
-public void mouseClicked() {
-  tempObj.points.add(new PVector(mouseX,mouseY));
+public void keyPressed() {
+  if (key == 'n'){
+    println("apple");
+    tempLoadObj();
+  }
+}
+
+public void mousePressed() {
+  photoCapture1.definedObjects.get(photoCapture1.definedObjects.size()-1).points.add(new PVector(mouseX,mouseY));
   println(tempObj.points);
   //game.mouseDragged(mouseX, mouseY);
 }
