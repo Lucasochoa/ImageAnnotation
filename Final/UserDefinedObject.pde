@@ -34,6 +34,9 @@ class UserDefinedObject{
         ellipse(p.x,p.y,20,20);
         line(p.x,p.y,p2.x,p2.y);
       }
+      if(points.size() > 1){
+          line(points.get(points.size()-1).x,points.get(points.size()-1).y,points.get(0).x,points.get(0).y);
+      }
   }
 
 }
