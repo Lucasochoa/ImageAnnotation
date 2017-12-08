@@ -8,7 +8,9 @@ PImage photo3;
 int w,h;
 
 void setup(){
+  pixelDensity(displayDensity());
   size(400,700);
+  appDelegateSetup();
   tempLoadImage();
   tempLoadObj();
 
@@ -16,6 +18,12 @@ void setup(){
 }
 void draw(){
   photoCapture1.draw();
+  //app.draw();
+}
+void appDelegateSetup(){
+  app = new AppDelegate();
+  app.addButton(50,50,50,50);
+  app.addButton(50,50,110,50);
 }
 
 void tempLoadObj(){
@@ -32,13 +40,25 @@ void tempLoadImage(){
 
 void keyPressed() {
   if (key == 'n'){
-    println("apple");
+    println("new user defined object incoming");
     tempLoadObj();
+  }
+  if (key == CODED){
+    if(keyCode == RIGHT) println("right button");
+    if (keyCode == LEFT) println("left button");
   }
 }
 
 void mousePressed() {
   photoCapture1.definedObjects.get(photoCapture1.definedObjects.size()-1).points.add(new PVector(mouseX,mouseY));
+  photoCapture1.definedObjects.get(photoCapture1.definedObjects.size()-1).setShape();
   println(tempObj.points);
+
+  //tempbuttonhandeler
+  app.checkButtons();
+
+
+
+
   //game.mouseDragged(mouseX, mouseY);
 }
