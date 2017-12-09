@@ -18,18 +18,21 @@ class AppDelegate{
 //loop checkers
 
   void clicked(){
-    for (Scene s: scenes){
-      s.clicked();
+    boolean trigger = false;
+    for (Button b: buttons){
+      trigger = b.isButtonClicked();
+      if (b.isButtonClicked()) break;
     }
+    if (!trigger){
+      for (Scene s: scenes){
+        s.clicked();
+      }
+    }
+
   }
 
-  void checkButtons(){
-    for (Button b: buttons){
-      b.isButtonClicked();
-    }
-  }
   void setup(){
-    selectPage = new SelectionPage();
+    SelectionPage selectPage = new SelectionPage();
     selectPage.setup();
 
     scenes.add(selectPage);

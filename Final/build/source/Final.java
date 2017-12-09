@@ -15,29 +15,22 @@ import java.io.IOException;
 public class Final extends PApplet {
 
 AppDelegate app;
-SelectionPage selectPage;
 
 public void setup(){
   
   
 
-  // selectPage = new SelectionPage();
-  // selectPage.setup();
-
   app = new AppDelegate();
   app.setup();
-
 }
 
 public void draw(){
-  //selectPage.draw();
   app.draw();
 }
 
 public void keyPressed() {
   if (key == 'n'){
     println("new user defined object incoming");
-    //tempLoadObj();
   }
   if (key == CODED){
     if(keyCode == RIGHT) println("right button");
@@ -47,7 +40,6 @@ public void keyPressed() {
 
 public void mousePressed() {
   app.clicked();
-  selectPage.clicked();
 
   //tempbuttonhandeler
   //app.checkButtons();
@@ -72,18 +64,22 @@ class AppDelegate{
 //loop checkers
 
   public void clicked(){
-    for (Scene s: scenes){
-      s.clicked();
+    boolean trigger = false;
+    for (Button b: buttons){
+      trigger = b.isButtonClicked();
+      if (b.isButtonClicked()) break;
     }
+
+    if (!trigger){
+      for (Scene s: scenes){
+        s.clicked();
+      }
+    }
+
   }
 
-  public void checkButtons(){
-    for (Button b: buttons){
-      b.isButtonClicked();
-    }
-  }
   public void setup(){
-    selectPage = new SelectionPage();
+    SelectionPage selectPage = new SelectionPage();
     selectPage.setup();
 
     scenes.add(selectPage);
@@ -123,8 +119,11 @@ protected boolean isOver(int mx, int my){
   else return false;
 }
 
- public void isButtonClicked(){
-  if (isOver(mouseX,mouseY)) println("clicked on button");
+ public boolean isButtonClicked(){
+  if (isOver(mouseX,mouseY)){
+    return true;
+  }
+  else return false; 
 }
 
 }

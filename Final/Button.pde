@@ -20,8 +20,11 @@ protected boolean isOver(int mx, int my){
   else return false;
 }
 
- void isButtonClicked(){
-  if (isOver(mouseX,mouseY)) println("clicked on button");
+ boolean isButtonClicked(){
+  if (isOver(mouseX,mouseY)){
+    return true;
+  }
+  else return false; 
 }
 
 }
