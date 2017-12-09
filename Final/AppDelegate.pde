@@ -1,11 +1,12 @@
 class AppDelegate{
   private ArrayList<PhotoCapture> annotatedCaptures;
   private ArrayList<Button> buttons;
-  //private ArrayList<Scenes
+  private ArrayList<Scene> scenes;
   int width, height;
 //contstructor
   AppDelegate(){
     annotatedCaptures = new ArrayList<PhotoCapture>();
+    scenes = new ArrayList<Scene>();
     buttons = new ArrayList<Button>();
     this.width = 400;
     this.height = 600;

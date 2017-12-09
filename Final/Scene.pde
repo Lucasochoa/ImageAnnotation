@@ -1,12 +1,9 @@
-// abstract class Scene{
-// private int a;
-//
-// protected void loadPage(){
-//
-// }
-//
-// protected void draw(){
-//
-// }
-//
-// }
+abstract class Scene{
+private String name;
+private int index;
+
+  abstract void setup();
+  abstract void draw();
+  abstract void clicked();
+
+}

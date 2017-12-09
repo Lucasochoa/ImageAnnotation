@@ -17,6 +17,8 @@ public class Final extends PApplet {
 AppDelegate app;
 PhotoCapture photoCapture1;
 UserDefinedObject tempObj;
+SelectionPage selectPage;
+
 PImage photo1;
 PImage photo2;
 PImage photo3;
@@ -26,15 +28,18 @@ int w,h;
 public void setup(){
   
   
+  selectPage = new SelectionPage();
+  selectPage.setup();
+
   appDelegateSetup();
-  tempLoadImage();
-  tempLoadObj();
+  //tempLoadImage();
+  //tempLoadObj();
 
   //app = new AppDelegate()
 }
 public void draw(){
-  photoCapture1.draw();
-  //app.draw();
+  selectPage.draw();
+  //photoCapture1.draw();
 }
 public void appDelegateSetup(){
   app = new AppDelegate();
@@ -57,8 +62,9 @@ public void tempLoadImage(){
 public void keyPressed() {
   if (key == 'n'){
     println("new user defined object incoming");
-    tempLoadObj();
+    //tempLoadObj();
   }
+  //if (key == 'c')photoCapture1.cleanImage();
   if (key == CODED){
     if(keyCode == RIGHT) println("right button");
     if (keyCode == LEFT) println("left button");
@@ -66,9 +72,14 @@ public void keyPressed() {
 }
 
 public void mousePressed() {
-  photoCapture1.definedObjects.get(photoCapture1.definedObjects.size()-1).points.add(new PVector(mouseX,mouseY));
-  photoCapture1.definedObjects.get(photoCapture1.definedObjects.size()-1).setShape();
-  println(tempObj.points);
+  int lastIndex = selectPage.captures.size()-1;
+  //println(selectPage.captures.get(lastIndex).);
+
+  selectPage.clicked();
+  // photoCapture1.definedObjects.get(photoCapture1.definedObjects.size()-1).points.add(new PVector(mouseX,mouseY));
+  // photoCapture1.definedObjects.get(photoCapture1.definedObjects.size()-1).setShape();
+
+  //println(tempObj.points);
 
   //tempbuttonhandeler
   app.checkButtons();
@@ -81,11 +92,12 @@ public void mousePressed() {
 class AppDelegate{
   private ArrayList<PhotoCapture> annotatedCaptures;
   private ArrayList<Button> buttons;
-  //private ArrayList<Scenes
+  private ArrayList<Scene> scenes;
   int width, height;
 //contstructor
   AppDelegate(){
     annotatedCaptures = new ArrayList<PhotoCapture>();
+    scenes = new ArrayList<Scene>();
     buttons = new ArrayList<Button>();
     this.width = 400;
     this.height = 600;
@@ -150,6 +162,7 @@ class PhotoCapture{
   PhotoCapture(PImage p){
     this.image = p;
     definedObjects = new ArrayList<UserDefinedObject>();
+    definedObjects.add(new UserDefinedObject("temp"));
   }
 //getters and setters
   public PImage getImage(){
@@ -158,11 +171,13 @@ class PhotoCapture{
   public void setImage(PImage p){
     this.image = p;
   }
+  public void clicked(){
+    definedObjects.get(definedObjects.size()-1).points.add(new PVector(mouseX,mouseY));
+    definedObjects.get(definedObjects.size()-1).setShape();
+  }
 
   public void cleanImage(){
-    for (int i = 0; i < definedObjects.size(); i++){
-      definedObjects.clear();
-    }
+    definedObjects =  new ArrayList<UserDefinedObject>();
   }
   public void draw(){
     image(this.image,0,0);
@@ -205,18 +220,38 @@ class Relationship{
     this.object = o;
   }
 }
-// abstract class Scene{
-// private int a;
-//
-// protected void loadPage(){
-//
-// }
-//
-// protected void draw(){
-//
-// }
-//
-// }
+abstract class Scene{
+private String name;
+private int index;
+
+  public abstract void setup();
+  public abstract void draw();
+  public abstract void clicked();
+
+}
+class SelectionPage extends Scene{
+ArrayList<PhotoCapture> captures;
+
+  SelectionPage(){
+    this.captures = new ArrayList<PhotoCapture>();
+    //self.setup();
+  }
+
+  public void setup(){
+    //super.setup();
+    captures = new ArrayList<PhotoCapture>();
+    PImage photo1 = loadImage("images/photo1.png");
+    photo1.resize(400,700);
+    captures.add(new PhotoCapture(photo1));
+  }
+  public void clicked(){
+    captures.get(captures.size()-1).clicked();
+  }
+
+  public void draw(){
+    captures.get(captures.size()-1).draw();
+  }
+}
 class UserDefinedObject{
 //members
   private String title;
