@@ -36,21 +36,22 @@ public void mousePressed() {
   app.clicked();
 }
 class AppDelegate{
-  //private ArrayList<PhotoCapture> annotatedCaptures;
   private ArrayList<Button> buttons;
   private ArrayList<Scene> scenes;
+  private Scene currentScene;
   int width, height;
 //contstructor
   AppDelegate(){
     scenes = new ArrayList<Scene>();
     buttons = new ArrayList<Button>();
+    currentScene = null;
     this.width = 400;
     this.height = 600;
   }
 //getters and setters
 
-   public void addButton(int width,int height,int x,int y){
-    this.buttons.add(new Button(width,height,x,y));
+   public void addButton(int width,int height,int x,int y,String s){
+    this.buttons.add(new Button(width,height,x,y,s));
   }
 //loop checkers
 
@@ -66,14 +67,12 @@ class AppDelegate{
       }
     }
   }
+
   public void keyPressed(){
-    if (key == 'n'){
-      println("new user defined object incoming");
+    for (Scene s: scenes){
+      s.keyPressed();
     }
-    if (key == CODED){
-      if(keyCode == RIGHT) println("right button");
-      if (keyCode == LEFT) println("left button");
-    }
+    if (key == 'n') println("new user defined object incoming");
   }
 
   public void setup(){
@@ -81,8 +80,9 @@ class AppDelegate{
     selectPage.setup();
 
     scenes.add(selectPage);
-    this.addButton(50,50,50,50);
-    this.addButton(50,50,110,50);
+
+    this.addButton(50,50,50,50,"left");
+    this.addButton(50,50,110,50,"right");
   }
 
   public void draw(){
@@ -96,16 +96,21 @@ class AppDelegate{
 
 }
 class Button{
+protected String name;
 protected int width,height,x,y;
 protected int col;
 
-Button(int width,int height,int x,int y){
+Button(int width,int height,int x,int y,String name){
+  this.name = name;
   this.width = width;
   this.height = height;
   this.x = x;
   this.y = y;
 }
-
+//getters and setters
+public String getName(){
+  return this.name;
+}
 protected void draw(){
   fill(color(255,0,0));
   rectMode(CENTER);
@@ -121,7 +126,7 @@ protected boolean isOver(int mx, int my){
   if (isOver(mouseX,mouseY)){
     return true;
   }
-  else return false; 
+  else return false;
 }
 
 }
@@ -200,24 +205,43 @@ private int index;
 
   public abstract void setup();
   public abstract void draw();
+  public abstract void keyPressed();
   public abstract void clicked();
 
 }
 class SelectionPage extends Scene{
-ArrayList<PhotoCapture> captures;
+private ArrayList<PhotoCapture> captures;
+private PhotoCapture currentCapture;
 
   SelectionPage(){
     this.captures = new ArrayList<PhotoCapture>();
-    //self.setup();
+    currentCapture = null;
   }
 
   public void setup(){
-    //super.setup();
+
     captures = new ArrayList<PhotoCapture>();
+
     PImage photo1 = loadImage("images/photo1.png");
+    PImage photo2 = loadImage("images/photo2.png");
+    PImage photo3 = loadImage("images/photo3.png");
+
     photo1.resize(400,700);
+    photo2.resize(400,700);
+    photo3.resize(400,700);
+
     captures.add(new PhotoCapture(photo1));
+    captures.add(new PhotoCapture(photo2));
+    captures.add(new PhotoCapture(photo3));
+
   }
+  public void keyPressed(){
+    if (key == CODED){
+      if(keyCode == RIGHT) captures.add(captures.remove(0));
+      if (keyCode == LEFT) captures.add(captures.remove(captures.size()-1));
+    }
+  }
+
   public void clicked(){
     captures.get(captures.size()-1).clicked();
   }

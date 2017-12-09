@@ -4,6 +4,7 @@ private int index;
 
   abstract void setup();
   abstract void draw();
+  abstract void keyPressed();
   abstract void clicked();
 
 }

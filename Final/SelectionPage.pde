@@ -1,18 +1,36 @@
 class SelectionPage extends Scene{
-ArrayList<PhotoCapture> captures;
+private ArrayList<PhotoCapture> captures;
+private PhotoCapture currentCapture;
 
   SelectionPage(){
     this.captures = new ArrayList<PhotoCapture>();
-    //self.setup();
+    currentCapture = null;
   }
 
   void setup(){
-    //super.setup();
+
     captures = new ArrayList<PhotoCapture>();
+
     PImage photo1 = loadImage("images/photo1.png");
+    PImage photo2 = loadImage("images/photo2.png");
+    PImage photo3 = loadImage("images/photo3.png");
+
     photo1.resize(400,700);
+    photo2.resize(400,700);
+    photo3.resize(400,700);
+
     captures.add(new PhotoCapture(photo1));
+    captures.add(new PhotoCapture(photo2));
+    captures.add(new PhotoCapture(photo3));
+
   }
+  void keyPressed(){
+    if (key == CODED){
+      if(keyCode == RIGHT) captures.add(captures.remove(0));
+      if (keyCode == LEFT) captures.add(captures.remove(captures.size()-1));
+    }
+  }
+
   void clicked(){
     captures.get(captures.size()-1).clicked();
   }
