@@ -15,48 +15,24 @@ import java.io.IOException;
 public class Final extends PApplet {
 
 AppDelegate app;
-PhotoCapture photoCapture1;
-UserDefinedObject tempObj;
 SelectionPage selectPage;
-
-PImage photo1;
-PImage photo2;
-PImage photo3;
-
-int w,h;
 
 public void setup(){
   
   
   selectPage = new SelectionPage();
   selectPage.setup();
-
   appDelegateSetup();
-  //tempLoadImage();
-  //tempLoadObj();
-
-  //app = new AppDelegate()
 }
+
 public void draw(){
   selectPage.draw();
-  //photoCapture1.draw();
 }
+
 public void appDelegateSetup(){
   app = new AppDelegate();
   app.addButton(50,50,50,50);
   app.addButton(50,50,110,50);
-}
-
-public void tempLoadObj(){
-  tempObj = new UserDefinedObject("henry");
-  photoCapture1.definedObjects.add(tempObj);
-}
-
-public void tempLoadImage(){
-  photo1 = loadImage("images/photo1.png");
-  photo1.resize(400,700);
-  photoCapture1 = new PhotoCapture();
-  photoCapture1.setImage(photo1);
 }
 
 public void keyPressed() {
@@ -72,8 +48,6 @@ public void keyPressed() {
 }
 
 public void mousePressed() {
-  int lastIndex = selectPage.captures.size()-1;
-  //println(selectPage.captures.get(lastIndex).);
 
   selectPage.clicked();
   // photoCapture1.definedObjects.get(photoCapture1.definedObjects.size()-1).points.add(new PVector(mouseX,mouseY));
