@@ -29,20 +29,11 @@ public void draw(){
 }
 
 public void keyPressed() {
-  if (key == 'n'){
-    println("new user defined object incoming");
-  }
-  if (key == CODED){
-    if(keyCode == RIGHT) println("right button");
-    if (keyCode == LEFT) println("left button");
-  }
+  app.keyPressed();
 }
 
 public void mousePressed() {
   app.clicked();
-
-  //tempbuttonhandeler
-  //app.checkButtons();
 }
 class AppDelegate{
   //private ArrayList<PhotoCapture> annotatedCaptures;
@@ -69,13 +60,20 @@ class AppDelegate{
       trigger = b.isButtonClicked();
       if (b.isButtonClicked()) break;
     }
-
     if (!trigger){
       for (Scene s: scenes){
         s.clicked();
       }
     }
-
+  }
+  public void keyPressed(){
+    if (key == 'n'){
+      println("new user defined object incoming");
+    }
+    if (key == CODED){
+      if(keyCode == RIGHT) println("right button");
+      if (keyCode == LEFT) println("left button");
+    }
   }
 
   public void setup(){

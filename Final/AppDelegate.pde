@@ -28,7 +28,16 @@ class AppDelegate{
         s.clicked();
       }
     }
-
+  }
+  
+  void keyPressed(){
+    if (key == 'n'){
+      println("new user defined object incoming");
+    }
+    if (key == CODED){
+      if(keyCode == RIGHT) println("right button");
+      if (keyCode == LEFT) println("left button");
+    }
   }
 
   void setup(){
