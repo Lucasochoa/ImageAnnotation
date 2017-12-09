@@ -26,13 +26,6 @@ class UserDefinedObject{
     this.title = title;
   }
 
-  // void display() {
-  //   pushMatrix();
-  //   translate(0, 0);
-  //   shape(this.objectShape);
-  //   popMatrix();
-  // }
-
   void setShape(){
       fill(255,0,0,55);
       this.objectShape = createShape();

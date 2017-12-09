@@ -4,19 +4,18 @@ SelectionPage selectPage;
 void setup(){
   pixelDensity(displayDensity());
   size(400,700);
-  selectPage = new SelectionPage();
-  selectPage.setup();
-  appDelegateSetup();
+
+  // selectPage = new SelectionPage();
+  // selectPage.setup();
+
+  app = new AppDelegate();
+  app.setup();
+
 }
 
 void draw(){
-  selectPage.draw();
-}
-
-void appDelegateSetup(){
-  app = new AppDelegate();
-  app.addButton(50,50,50,50);
-  app.addButton(50,50,110,50);
+  //selectPage.draw();
+  app.draw();
 }
 
 void keyPressed() {
@@ -31,9 +30,9 @@ void keyPressed() {
 }
 
 void mousePressed() {
-
+  app.clicked();
   selectPage.clicked();
+
   //tempbuttonhandeler
-  app.checkButtons();
-  
+  //app.checkButtons();
 }

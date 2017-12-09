@@ -20,19 +20,18 @@ SelectionPage selectPage;
 public void setup(){
   
   
-  selectPage = new SelectionPage();
-  selectPage.setup();
-  appDelegateSetup();
+
+  // selectPage = new SelectionPage();
+  // selectPage.setup();
+
+  app = new AppDelegate();
+  app.setup();
+
 }
 
 public void draw(){
-  selectPage.draw();
-}
-
-public void appDelegateSetup(){
-  app = new AppDelegate();
-  app.addButton(50,50,50,50);
-  app.addButton(50,50,110,50);
+  //selectPage.draw();
+  app.draw();
 }
 
 public void keyPressed() {
@@ -40,7 +39,6 @@ public void keyPressed() {
     println("new user defined object incoming");
     //tempLoadObj();
   }
-  //if (key == 'c')photoCapture1.cleanImage();
   if (key == CODED){
     if(keyCode == RIGHT) println("right button");
     if (keyCode == LEFT) println("left button");
@@ -48,50 +46,55 @@ public void keyPressed() {
 }
 
 public void mousePressed() {
-
+  app.clicked();
   selectPage.clicked();
-  // photoCapture1.definedObjects.get(photoCapture1.definedObjects.size()-1).points.add(new PVector(mouseX,mouseY));
-  // photoCapture1.definedObjects.get(photoCapture1.definedObjects.size()-1).setShape();
-
-  //println(tempObj.points);
 
   //tempbuttonhandeler
-  app.checkButtons();
-
-
-
-
-  //game.mouseDragged(mouseX, mouseY);
+  //app.checkButtons();
 }
 class AppDelegate{
-  private ArrayList<PhotoCapture> annotatedCaptures;
+  //private ArrayList<PhotoCapture> annotatedCaptures;
   private ArrayList<Button> buttons;
   private ArrayList<Scene> scenes;
   int width, height;
 //contstructor
   AppDelegate(){
-    annotatedCaptures = new ArrayList<PhotoCapture>();
     scenes = new ArrayList<Scene>();
     buttons = new ArrayList<Button>();
     this.width = 400;
     this.height = 600;
   }
 //getters and setters
-  public void addPhotoCapture(PhotoCapture p){
-    this.annotatedCaptures.add(p);
-  }
-  public void addButton(int width,int height,int x,int y){
+
+   public void addButton(int width,int height,int x,int y){
     this.buttons.add(new Button(width,height,x,y));
   }
 //loop checkers
+
+  public void clicked(){
+    for (Scene s: scenes){
+      s.clicked();
+    }
+  }
+
   public void checkButtons(){
     for (Button b: buttons){
       b.isButtonClicked();
     }
   }
+  public void setup(){
+    selectPage = new SelectionPage();
+    selectPage.setup();
 
+    scenes.add(selectPage);
+    this.addButton(50,50,50,50);
+    this.addButton(50,50,110,50);
+  }
 
   public void draw(){
+    for (Scene s: scenes){
+      s.draw();
+    }
     for (Button b: buttons){
       b.draw();
     }
@@ -253,13 +256,6 @@ class UserDefinedObject{
   public void setTitle(String title){
     this.title = title;
   }
-
-  // void display() {
-  //   pushMatrix();
-  //   translate(0, 0);
-  //   shape(this.objectShape);
-  //   popMatrix();
-  // }
 
   public void setShape(){
       fill(255,0,0,55);
