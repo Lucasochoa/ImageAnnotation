@@ -27,11 +27,17 @@ private ArrayList<PhotoCapture> captures;
         width-padding*2,(height-40)/selectedCapture.definedObjects.size(),20);
         fill(255);
         text(selectedCapture.definedObjects.get(i).getTitle(),padding * 2, ((height/selectedCapture.definedObjects.size())*i)+padding * 2);
+        // try{
+        //     text(selectedCapture.definedObjects.get(i).relationships.get(0).getPreposition(),padding * 2, ((height/selectedCapture.definedObjects.size())*i)+padding * 2);
+        // }
+        // catch(IndexOutOfBoundsException e){
+        //   println("error");
+        // }
 
     }
   }
   void keyPressed(){
-    println("keypressed handeler");
+    if (key == 'e') println("working from list view");
   }
   void clicked(){
     println("clicked handeler");

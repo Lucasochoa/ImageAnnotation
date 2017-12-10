@@ -170,28 +170,39 @@ private ArrayList<PhotoCapture> captures;
         rect(padding,((height-40)/selectedCapture.definedObjects.size()*i) + (padding * i),
         width-padding*2,(height-40)/selectedCapture.definedObjects.size(),20);
         fill(255);
-        text(selectedCapture.definedObjects.get(i).getTitle(), padding * 2, ((height/selectedCapture.definedObjects.size())*i)+padding * 2);
+        text(selectedCapture.definedObjects.get(i).getTitle(),padding * 2, ((height/selectedCapture.definedObjects.size())*i)+padding * 2);
+        // try{
+        //     text(selectedCapture.definedObjects.get(i).relationships.get(0).getPreposition(),padding * 2, ((height/selectedCapture.definedObjects.size())*i)+padding * 2);
+        // }
+        // catch(IndexOutOfBoundsException e){
+        //   println("error");
+        // }
 
     }
   }
   public void keyPressed(){
-    println("keypressed handeler");
+    if (key == 'e') println("working from list view");
   }
   public void clicked(){
     println("clicked handeler");
   }
 }
 class PhotoCapture{
+  private boolean drawable;
   private String name;
   private PImage image;
+  private UserDefinedObject selectedObject;
   ArrayList <UserDefinedObject> definedObjects;
+
 //constructors
   PhotoCapture(){
+    this.drawable = false;
     this.image = null;
     this.name = "empty name";
     this.definedObjects = new ArrayList<UserDefinedObject>();
   }
   PhotoCapture(PImage p){
+    this.drawable = false;
     this.image = p;
     this.name = "empty name";
     definedObjects = new ArrayList<UserDefinedObject>();
@@ -204,9 +215,23 @@ class PhotoCapture{
   public void setImage(PImage p){
     this.image = p;
   }
+  public void keyPressed(){
+    if(key == 'y') drawable = true;
+    else drawable = false;
+  }
   public void clicked(){
-    definedObjects.get(definedObjects.size()-1).points.add(new PVector(mouseX,mouseY));
-    definedObjects.get(definedObjects.size()-1).setShape();
+    for (int i = 0; i< definedObjects.size(); i++){
+      if (isInsidePolygon(definedObjects.get(i).points,mouseX,mouseY)){
+        println("inside!!! from index: " + i );
+        //this.selectedObject = object;
+      }
+    }
+
+
+    if(drawable){
+      definedObjects.get(definedObjects.size()-1).points.add(new PVector(mouseX,mouseY));
+      definedObjects.get(definedObjects.size()-1).setShape();
+    }
   }
 
   public void cleanImage(){
@@ -220,14 +245,26 @@ class PhotoCapture{
   }
 
 }
+//not my code!! https://forum.processing.org/two/discussion/6094/ability-to-select-custom-shapes-created-using-vertex
+public boolean isInsidePolygon(ArrayList<PVector> verts, float x0, float y0){
+  boolean oddNodes = false;
+  for (int i = 0, j = verts.size() - 1; i < verts.size(); j = i, i++) {
+    PVector vi = verts.get(i);
+    PVector vj = verts.get(j);
+    if ((vi.y < y0 && vj.y >= y0 || vj.y < y0 && vi.y >= y0) &&
+    (vi.x + (y0 - vi.y) / (vj.y - vi.y) * (vj.x - vi.x) < x0))
+      oddNodes = !oddNodes;
+  }
+  return oddNodes;
+}
 class Relationship{
 //members
   String preposition;
   UserDefinedObject object;
 //constructors
   Relationship(){
-    preposition = null;
-    object = null;
+    this.preposition = null;
+    this.object = null;
   }
   Relationship(String a){
     if(a != " on top of " || a != " below " || a != " beside ") preposition = null;
@@ -235,9 +272,10 @@ class Relationship{
     object = null;
   }
   Relationship(String a, UserDefinedObject udo){
-    if(a != " on top of " || a != " below " || a != " beside ") preposition = null;
-    else preposition = a;
-    object = udo;
+    // if(a != " on top of " || a != " below " || a != " beside ") preposition = null;
+    // else preposition = a;
+    this.preposition = a;
+    this.object = udo;
   }
 //getters and setters
   public String getPreposition(){
@@ -295,13 +333,21 @@ private PhotoCapture currentCapture;
   }
   public void keyPressed(){
     if (key == 'n'){
-      captures.get(captures.size()-1).definedObjects.add(new UserDefinedObject("henry"));
+      //temp
+      ArrayList<Relationship> relationships = new ArrayList<Relationship>();
+      UserDefinedObject tempObject = new UserDefinedObject("temporary object");
+      relationships.add(new Relationship(" on top of ", tempObject));
+      //temp
+      captures.get(captures.size()-1).definedObjects.add(new UserDefinedObject("henry",relationships));
       println("new object added to shown capture");
     }
     if (key == CODED){
       if(keyCode == RIGHT) captures.add(captures.remove(0));
       if (keyCode == LEFT) captures.add(0,captures.remove(captures.size()-1));
     }
+
+    captures.get(captures.size()-1).keyPressed();
+
   }
 
   public void clicked(){
@@ -329,6 +375,12 @@ class UserDefinedObject{
   UserDefinedObject(String title){
     this.title = title;
     this.relationships = new ArrayList<Relationship>();
+    this.points = new ArrayList<PVector>();
+    this.objectShape = createShape();
+  }
+  UserDefinedObject(String title, ArrayList<Relationship> relationships){
+    this.title = title;
+    this.relationships = relationships;
     this.points = new ArrayList<PVector>();
     this.objectShape = createShape();
   }

@@ -18,6 +18,12 @@ class UserDefinedObject{
     this.points = new ArrayList<PVector>();
     this.objectShape = createShape();
   }
+  UserDefinedObject(String title, ArrayList<Relationship> relationships){
+    this.title = title;
+    this.relationships = relationships;
+    this.points = new ArrayList<PVector>();
+    this.objectShape = createShape();
+  }
 //getters and setters
   String getTitle(){
     return this.title;

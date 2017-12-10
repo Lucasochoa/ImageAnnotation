@@ -30,13 +30,21 @@ private PhotoCapture currentCapture;
   }
   void keyPressed(){
     if (key == 'n'){
-      captures.get(captures.size()-1).definedObjects.add(new UserDefinedObject("henry"));
+      //temp
+      ArrayList<Relationship> relationships = new ArrayList<Relationship>();
+      UserDefinedObject tempObject = new UserDefinedObject("temporary object");
+      relationships.add(new Relationship(" on top of ", tempObject));
+      //temp
+      captures.get(captures.size()-1).definedObjects.add(new UserDefinedObject("henry",relationships));
       println("new object added to shown capture");
     }
     if (key == CODED){
       if(keyCode == RIGHT) captures.add(captures.remove(0));
       if (keyCode == LEFT) captures.add(0,captures.remove(captures.size()-1));
     }
+
+    captures.get(captures.size()-1).keyPressed();
+
   }
 
   void clicked(){
