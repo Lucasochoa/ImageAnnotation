@@ -15,12 +15,19 @@ private ArrayList<PhotoCapture> captures;
   void draw(){
     PhotoCapture selectedCapture = captures.get(captures.size()-1);
     int padding = 20;
+
+    textSize(30);
     background(51);
-    fill(10,100,100);//fill for tableview cells
+
     rectMode(CORNER);
+
     for (int i = 0; i < selectedCapture.definedObjects.size(); i++){
+        fill(10,100,100);//fill for tableview cells
         rect(padding,((height-40)/selectedCapture.definedObjects.size()*i) + (padding * i),
         width-padding*2,(height-40)/selectedCapture.definedObjects.size(),20);
+        fill(255);
+        text(selectedCapture.definedObjects.get(i).getTitle(),padding * 2, ((height/selectedCapture.definedObjects.size())*i)+padding * 2);
+
     }
   }
   void keyPressed(){

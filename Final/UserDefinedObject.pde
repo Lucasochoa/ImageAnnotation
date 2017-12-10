@@ -6,7 +6,7 @@ class UserDefinedObject{
   ArrayList<PVector> points;
 //constructors
   UserDefinedObject(){
-    this.title = null;
+    this.title = "empty name";
     this.relationships = new ArrayList<Relationship>();
     this.points = new ArrayList<PVector>();
     this.objectShape = createShape();
