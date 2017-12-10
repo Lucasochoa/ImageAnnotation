@@ -1,13 +1,16 @@
 class PhotoCapture{
+  private String name;
   private PImage image;
   ArrayList <UserDefinedObject> definedObjects;
 //constructors
   PhotoCapture(){
-    image = null;
-    definedObjects = new ArrayList<UserDefinedObject>();
+    this.image = null;
+    this.name = "empty name";
+    this.definedObjects = new ArrayList<UserDefinedObject>();
   }
   PhotoCapture(PImage p){
     this.image = p;
+    this.name = "empty name";
     definedObjects = new ArrayList<UserDefinedObject>();
     definedObjects.add(new UserDefinedObject("temp"));
   }

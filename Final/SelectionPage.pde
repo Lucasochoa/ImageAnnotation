@@ -6,6 +6,10 @@ private PhotoCapture currentCapture;
     this.captures = new ArrayList<PhotoCapture>();
     currentCapture = null;
   }
+  //getters and setters
+  ArrayList<PhotoCapture> getPhotoCaptures(){
+    return this.captures;
+  }
 
   void setup(){
 
@@ -25,9 +29,13 @@ private PhotoCapture currentCapture;
 
   }
   void keyPressed(){
+    if (key == 'n'){
+      captures.get(captures.size()-1).definedObjects.add(new UserDefinedObject("henry"));
+      println("new object added to shown capture");
+    }
     if (key == CODED){
       if(keyCode == RIGHT) captures.add(captures.remove(0));
-      if (keyCode == LEFT) captures.add(captures.remove(captures.size()-1));
+      if (keyCode == LEFT) captures.add(0,captures.remove(captures.size()-1));
     }
   }
 

@@ -48,18 +48,23 @@ class AppDelegate{
     this.width = 400;
     this.height = 600;
   }
-//getters and setters
 
    public void addButton(int width,int height,int x,int y,String s){
     this.buttons.add(new Button(width,height,x,y,s));
   }
-//loop checkers
 
   public void clicked(){
     boolean trigger = false;
     for (Button b: buttons){
       trigger = b.isButtonClicked();
-      if (b.isButtonClicked()) break;
+      if (b.isButtonClicked()){
+          if (b.getName() == "right"){
+            scenes.add(scenes.remove(0));
+            println("clicking from right");
+          }
+          if (b.getName() == "left") println("clicking from left");
+          break;
+      }
     }
     if (!trigger){
       for (Scene s: scenes){
@@ -72,23 +77,30 @@ class AppDelegate{
     for (Scene s: scenes){
       s.keyPressed();
     }
-    if (key == 'n') println("new user defined object incoming");
+    ///if (key == 'n') println("new user defined object incoming");
   }
 
   public void setup(){
     SelectionPage selectPage = new SelectionPage();
     selectPage.setup();
 
+    ListViewScene listViewPage = new ListViewScene(selectPage.getPhotoCaptures()); //temp
+
+    scenes.add(listViewPage);
     scenes.add(selectPage);
 
+
+    //control setup
     this.addButton(50,50,50,50,"left");
     this.addButton(50,50,110,50,"right");
   }
 
   public void draw(){
-    for (Scene s: scenes){
-      s.draw();
-    }
+    // for (Scene s: scenes){
+    //   s.draw();
+    // }
+    scenes.get(scenes.size()-1).draw();
+
     for (Button b: buttons){
       b.draw();
     }
@@ -130,16 +142,51 @@ protected boolean isOver(int mx, int my){
 }
 
 }
+class ListViewScene extends Scene{
+private ArrayList<PhotoCapture> captures;
+
+  ListViewScene(ArrayList<PhotoCapture> photoCaptures){
+      // this.captues = new ArrayList<PhotoCapture>();
+      this.captures = photoCaptures;
+  }
+  public void provideInfo(){
+    println(this.captures);
+  }
+
+  public void setup(){
+    println("setting up from listView Scene");
+  }
+  public void draw(){
+    PhotoCapture selectedCapture = captures.get(captures.size()-1);
+    int padding = 20;
+    background(51);
+    fill(10,100,100);//fill for tableview cells
+    rectMode(CORNER);
+    for (int i = 0; i < selectedCapture.definedObjects.size(); i++){
+        rect(padding,((height-40)/selectedCapture.definedObjects.size()*i) + (padding * i),
+        width-padding*2,(height-40)/selectedCapture.definedObjects.size(),20);
+    }
+  }
+  public void keyPressed(){
+    println("keypressed handeler");
+  }
+  public void clicked(){
+    println("clicked handeler");
+  }
+}
 class PhotoCapture{
+  private String name;
   private PImage image;
   ArrayList <UserDefinedObject> definedObjects;
 //constructors
   PhotoCapture(){
-    image = null;
-    definedObjects = new ArrayList<UserDefinedObject>();
+    this.image = null;
+    this.name = "empty name";
+    this.definedObjects = new ArrayList<UserDefinedObject>();
   }
   PhotoCapture(PImage p){
     this.image = p;
+    this.name = "empty name";
     definedObjects = new ArrayList<UserDefinedObject>();
     definedObjects.add(new UserDefinedObject("temp"));
   }
@@ -217,6 +264,10 @@ private PhotoCapture currentCapture;
     this.captures = new ArrayList<PhotoCapture>();
     currentCapture = null;
   }
+  //getters and setters
+  public ArrayList<PhotoCapture> getPhotoCaptures(){
+    return this.captures;
+  }
 
   public void setup(){
 
@@ -236,9 +287,13 @@ private PhotoCapture currentCapture;
 
   }
   public void keyPressed(){
+    if (key == 'n'){
+      captures.get(captures.size()-1).definedObjects.add(new UserDefinedObject("henry"));
+      println("new object added to shown capture");
+    }
     if (key == CODED){
       if(keyCode == RIGHT) captures.add(captures.remove(0));
-      if (keyCode == LEFT) captures.add(captures.remove(captures.size()-1));
+      if (keyCode == LEFT) captures.add(0,captures.remove(captures.size()-1));
     }
   }
 
