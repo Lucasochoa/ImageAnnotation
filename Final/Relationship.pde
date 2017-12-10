@@ -8,8 +8,9 @@ class Relationship{
     this.object = null;
   }
   Relationship(String a){
-    if(a != " on top of " || a != " below " || a != " beside ") preposition = null;
-    else preposition = a;
+    // if(a != " on top of " || a != " below " || a != " beside ") preposition = null;
+    // else preposition = a;
+    this.preposition = a;
     object = null;
   }
   Relationship(String a, UserDefinedObject udo){

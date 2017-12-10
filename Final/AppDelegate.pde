@@ -1,15 +1,26 @@
-class AppDelegate{
+class AppDelegate extends Observable{
+  private Relationship globalRelationship;
   private ArrayList<Button> buttons;
   private ArrayList<Scene> scenes;
   private Scene currentScene;
   int width, height;
 //contstructor
   AppDelegate(){
+    super();
+    globalRelationship = null;
     scenes = new ArrayList<Scene>();
     buttons = new ArrayList<Button>();
     currentScene = null;
     this.width = 400;
     this.height = 600;
+  }
+  String getRelationshipString(){
+    return this.globalRelationship.getPreposition();
+  }
+  void setRelationship(Relationship r){
+    this.globalRelationship = r;
+    setChanged();
+    notifyObservers();
   }
 
    void addButton(int width,int height,int x,int y,String s){

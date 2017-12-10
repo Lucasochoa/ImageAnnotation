@@ -3,6 +3,9 @@ import processing.data.*;
 import processing.event.*; 
 import processing.opengl.*; 
 
+import controlP5.*; 
+import java.util.*; 
+
 import java.util.HashMap; 
 import java.util.ArrayList; 
 import java.io.File; 
@@ -14,7 +17,12 @@ import java.io.IOException;
 
 public class Final extends PApplet {
 
+
+
+
+ControlP5 cp5;
 AppDelegate app;
+
 
 public void setup(){
   
@@ -22,6 +30,10 @@ public void setup(){
 
   app = new AppDelegate();
   app.setup();
+
+
+
+  cp5 = new ControlP5(this);
 }
 
 public void draw(){
@@ -29,24 +41,100 @@ public void draw(){
 }
 
 public void keyPressed() {
+  if(key == 't'){
+    println(app.getRelationshipString());
+  }
   app.keyPressed();
 }
 
 public void mousePressed() {
   app.clicked();
 }
-class AppDelegate{
+
+public void conjureDropDown(){
+
+  List l = Arrays.asList("on top of", "below", "above", "next to", "behind");
+  /* add a ScrollableList, by default it behaves like a DropdownList */
+  cp5.addScrollableList("select relationship")
+     .setPosition(width-200, 0)
+     .setSize(200, 100)
+     .setBarHeight(20)
+     .setItemHeight(20)
+     .addItems(l)
+     .close()
+     // .setType(ScrollableList.LIST) // currently supported DROPDOWN and LIST
+     ;
+}
+public void controlEvent(ControlEvent theEvent) {
+  //println(theEvent);
+  //println(theEvent.getLabel());
+  println((int)theEvent.getValue());
+  int temp = ((int)theEvent.getValue());
+  // if (theEvent.isGroup()) {
+  //   println(theEvent.getGroup() + " => " + theEvent.getGroup().getValue());
+
+  String rTemp;
+  switch(temp){
+    case 0: rTemp = "on top of";
+    break;
+    case 1: rTemp = "below";
+    break;
+    case 2: rTemp = "above";
+    break;
+    case 3: rTemp = "next to";
+    break;
+    case 4: rTemp = "behind";
+    break;
+    default: rTemp = "error";
+    break;
+  }
+  app.setRelationship(new Relationship(rTemp));
+  cp5.remove("select relationship");
+}
+
+
+
+
+// void dropdown(int n) {
+//   /* request the selected item based on index n */
+//   println(n, cp5.get(ScrollableList.class, "dropdown").getItem(n));
+//
+//   /* here an item is stored as a Map  with the following key-value pairs:
+//    * name, the given name of the item
+//    * text, the given text of the item by default the same as name
+//    * value, the given value of the item, can be changed by using .getItem(n).put("value", "abc"); a value here is of type Object therefore can be anything
+//    * color, the given color of the item, how to change, see below
+//    * view, a customizable view, is of type CDrawable
+//    */
+//
+//    CColor c = new CColor();
+//   c.setBackground(color(255,0,0));
+//   cp5.get(ScrollableList.class, "dropdown").getItem(n).put("color", c);
+//   cp5.get(ScrollableList.class, "dropdown").setType(ControlP5.DROPDOWN);
+// }
+class AppDelegate extends Observable{
+  private Relationship globalRelationship;
   private ArrayList<Button> buttons;
   private ArrayList<Scene> scenes;
   private Scene currentScene;
   int width, height;
 //contstructor
   AppDelegate(){
+    super();
+    globalRelationship = null;
     scenes = new ArrayList<Scene>();
     buttons = new ArrayList<Button>();
     currentScene = null;
     this.width = 400;
     this.height = 600;
+  }
+  public String getRelationshipString(){
+    return this.globalRelationship.getPreposition();
+  }
+  public void setRelationship(Relationship r){
+    this.globalRelationship = r;
+    setChanged();
+    notifyObservers();
   }
 
    public void addButton(int width,int height,int x,int y,String s){
@@ -187,26 +275,38 @@ private ArrayList<PhotoCapture> captures;
     println("clicked handeler");
   }
 }
-class PhotoCapture{
+class PhotoCapture implements Observer{
+  //private ControlP5 controllers;
   private boolean drawable;
   private String name;
   private PImage image;
-  private UserDefinedObject selectedObject;
+  private ArrayList<UserDefinedObject> selectedObjects;
   ArrayList <UserDefinedObject> definedObjects;
 
 //constructors
   PhotoCapture(){
+    //this.controllers = new ControlP5();
+    //super();
     this.drawable = false;
     this.image = null;
     this.name = "empty name";
     this.definedObjects = new ArrayList<UserDefinedObject>();
+    this.selectedObjects = new ArrayList<UserDefinedObject>();
   }
   PhotoCapture(PImage p){
+    //super();
+    //this.controllers = new ControlP5();
     this.drawable = false;
     this.image = p;
     this.name = "empty name";
+    this.selectedObjects = new ArrayList<UserDefinedObject>();
     definedObjects = new ArrayList<UserDefinedObject>();
     definedObjects.add(new UserDefinedObject("temp"));
+  }
+  public void setup(){
+    app.addObserver(this);
+    //cp5 = new ControlP5(this);
+    //println("setup complete");
   }
 //getters and setters
   public PImage getImage(){
@@ -220,10 +320,23 @@ class PhotoCapture{
     else drawable = false;
   }
   public void clicked(){
+
     for (int i = 0; i< definedObjects.size(); i++){
       if (isInsidePolygon(definedObjects.get(i).points,mouseX,mouseY)){
         println("inside!!! from index: " + i );
-        //this.selectedObject = object;
+        //captures.add(captures.remove(0));
+        if(this.selectedObjects.size() < 2){
+            this.selectedObjects.add(definedObjects.get(i));
+        }
+        else{
+          this.selectedObjects.remove(0);
+          this.selectedObjects.add(definedObjects.get(i));
+        }
+        println(this.selectedObjects);
+        if (this.selectedObjects.size() == 2){
+            conjureDropDown();
+        }
+
       }
     }
 
@@ -243,20 +356,12 @@ class PhotoCapture{
       o.draw();
     }
   }
+  public void update(Observable obs, Object obj){
+    println("updating from observer");
+  }
 
 }
-//not my code!! https://forum.processing.org/two/discussion/6094/ability-to-select-custom-shapes-created-using-vertex
-public boolean isInsidePolygon(ArrayList<PVector> verts, float x0, float y0){
-  boolean oddNodes = false;
-  for (int i = 0, j = verts.size() - 1; i < verts.size(); j = i, i++) {
-    PVector vi = verts.get(i);
-    PVector vj = verts.get(j);
-    if ((vi.y < y0 && vj.y >= y0 || vj.y < y0 && vi.y >= y0) &&
-    (vi.x + (y0 - vi.y) / (vj.y - vi.y) * (vj.x - vi.x) < x0))
-      oddNodes = !oddNodes;
-  }
-  return oddNodes;
-}
+//
 class Relationship{
 //members
   String preposition;
@@ -267,8 +372,9 @@ class Relationship{
     this.object = null;
   }
   Relationship(String a){
-    if(a != " on top of " || a != " below " || a != " beside ") preposition = null;
-    else preposition = a;
+    // if(a != " on top of " || a != " below " || a != " beside ") preposition = null;
+    // else preposition = a;
+    this.preposition = a;
     object = null;
   }
   Relationship(String a, UserDefinedObject udo){
@@ -330,6 +436,10 @@ private PhotoCapture currentCapture;
     captures.add(new PhotoCapture(photo2));
     captures.add(new PhotoCapture(photo3));
 
+    for (PhotoCapture c: captures){
+      c.setup();
+    }
+
   }
   public void keyPressed(){
     if (key == 'n'){
@@ -351,12 +461,36 @@ private PhotoCapture currentCapture;
   }
 
   public void clicked(){
+    //this.currentCapture = captures.get(captures.size()-1);
+
+    // for (int i = 0; i< this.currentCapture.definedObjects.size(); i++){
+    //   if (isInsidePolygon(this.currentCapture.definedObjects.get(i).points,mouseX,mouseY)){
+    //     println("inside!!! from index: " + i );
+    //     //this.selectedObject = definedObjects.get(i);
+    //     conjureDropDown();
+    //   }
+    // }
+
+
     captures.get(captures.size()-1).clicked();
   }
 
   public void draw(){
     captures.get(captures.size()-1).draw();
   }
+}
+
+//not my code!! https://forum.processing.org/two/discussion/6094/ability-to-select-custom-shapes-created-using-vertex
+public boolean isInsidePolygon(ArrayList<PVector> verts, float x0, float y0){
+  boolean oddNodes = false;
+  for (int i = 0, j = verts.size() - 1; i < verts.size(); j = i, i++) {
+    PVector vi = verts.get(i);
+    PVector vj = verts.get(j);
+    if ((vi.y < y0 && vj.y >= y0 || vj.y < y0 && vi.y >= y0) &&
+    (vi.x + (y0 - vi.y) / (vj.y - vi.y) * (vj.x - vi.x) < x0))
+      oddNodes = !oddNodes;
+  }
+  return oddNodes;
 }
 class UserDefinedObject{
 //members

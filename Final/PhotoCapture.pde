@@ -1,23 +1,35 @@
-class PhotoCapture{
+class PhotoCapture implements Observer{
+  //private ControlP5 controllers;
   private boolean drawable;
   private String name;
   private PImage image;
-  private UserDefinedObject selectedObject;
+  private ArrayList<UserDefinedObject> selectedObjects;
   ArrayList <UserDefinedObject> definedObjects;
 
 //constructors
   PhotoCapture(){
+    //this.controllers = new ControlP5();
+    //super();
     this.drawable = false;
     this.image = null;
     this.name = "empty name";
     this.definedObjects = new ArrayList<UserDefinedObject>();
+    this.selectedObjects = new ArrayList<UserDefinedObject>();
   }
   PhotoCapture(PImage p){
+    //super();
+    //this.controllers = new ControlP5();
     this.drawable = false;
     this.image = p;
     this.name = "empty name";
+    this.selectedObjects = new ArrayList<UserDefinedObject>();
     definedObjects = new ArrayList<UserDefinedObject>();
     definedObjects.add(new UserDefinedObject("temp"));
+  }
+  void setup(){
+    app.addObserver(this);
+    //cp5 = new ControlP5(this);
+    //println("setup complete");
   }
 //getters and setters
   PImage getImage(){
@@ -31,10 +43,23 @@ class PhotoCapture{
     else drawable = false;
   }
   void clicked(){
+
     for (int i = 0; i< definedObjects.size(); i++){
       if (isInsidePolygon(definedObjects.get(i).points,mouseX,mouseY)){
         println("inside!!! from index: " + i );
-        this.selectedObject = definedObjects.get(i);
+        //captures.add(captures.remove(0));
+        if(this.selectedObjects.size() < 2){
+            this.selectedObjects.add(definedObjects.get(i));
+        }
+        else{
+          this.selectedObjects.remove(0);
+          this.selectedObjects.add(definedObjects.get(i));
+        }
+        println(this.selectedObjects);
+        if (this.selectedObjects.size() == 2){
+            conjureDropDown();
+        }
+
       }
     }
 
@@ -54,17 +79,9 @@ class PhotoCapture{
       o.draw();
     }
   }
+  void update(Observable obs, Object obj){
+    println("updating from observer");
+  }
 
 }
-//not my code!! https://forum.processing.org/two/discussion/6094/ability-to-select-custom-shapes-created-using-vertex
-public boolean isInsidePolygon(ArrayList<PVector> verts, float x0, float y0){
-  boolean oddNodes = false;
-  for (int i = 0, j = verts.size() - 1; i < verts.size(); j = i, i++) {
-    PVector vi = verts.get(i);
-    PVector vj = verts.get(j);
-    if ((vi.y < y0 && vj.y >= y0 || vj.y < y0 && vi.y >= y0) &&
-    (vi.x + (y0 - vi.y) / (vj.y - vi.y) * (vj.x - vi.x) < x0))
-      oddNodes = !oddNodes;
-  }
-  return oddNodes;
-}
+//
