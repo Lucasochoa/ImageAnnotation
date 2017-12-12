@@ -325,15 +325,16 @@ class PhotoCapture implements Observer{
       if (isInsidePolygon(definedObjects.get(i).points,mouseX,mouseY)){
         println("inside!!! from index: " + i );
         //captures.add(captures.remove(0));
-        if(this.selectedObjects.size() < 2){
+        if(this.selectedObjects.size() < 1){
             this.selectedObjects.add(definedObjects.get(i));
         }
-        else{
-          this.selectedObjects.remove(0);
-          this.selectedObjects.add(definedObjects.get(i));
-        }
-        println(this.selectedObjects);
-        if (this.selectedObjects.size() == 2){
+        // else{
+        //   this.selectedObjects.remove(0);
+        //   this.selectedObjects.add(definedObjects.get(i));
+        // }
+
+        println("photocapture printout " + this.selectedObjects);
+        if (this.selectedObjects.size() == 1){
             conjureDropDown();
         }
 
@@ -358,6 +359,8 @@ class PhotoCapture implements Observer{
   }
   public void update(Observable obs, Object obj){
     println("updating from observer");
+    println(this.selectedObjects);
+    println(app.getRelationshipString());
   }
 
 }
@@ -436,9 +439,9 @@ private PhotoCapture currentCapture;
     captures.add(new PhotoCapture(photo2));
     captures.add(new PhotoCapture(photo3));
 
-    for (PhotoCapture c: captures){
-      c.setup();
-    }
+    //for (PhotoCapture c: captures){
+    captures.get(captures.size()-1).setup();
+    //}
 
   }
   public void keyPressed(){

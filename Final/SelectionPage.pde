@@ -27,9 +27,9 @@ private PhotoCapture currentCapture;
     captures.add(new PhotoCapture(photo2));
     captures.add(new PhotoCapture(photo3));
 
-    for (PhotoCapture c: captures){
-      c.setup();
-    }
+    //for (PhotoCapture c: captures){
+    captures.get(captures.size()-1).setup();
+    //}
 
   }
   void keyPressed(){
