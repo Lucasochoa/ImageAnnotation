@@ -21,16 +21,27 @@ public class Final extends PApplet {
 
 
 //ControlP5 cp5;
+//String textValue = "";
+
+
 AppDelegate app;
 PApplet publicApplet = this;
+
 //publicApplet = this;
 
 public void setup(){
-  
+  //pixelDensity(displayDensity());
   
 
   app = new AppDelegate();
   app.setup();
+
+
+  // cp5 = new ControlP5(this);
+  // cp5.addTextfield("Input Object Name")
+  //  .setPosition(20,height-40)
+  //  .setAutoClear(true)
+  //  ;
 
 
 }
@@ -49,6 +60,19 @@ public void keyPressed() {
 public void mousePressed() {
   app.clicked();
 }
+
+// void controlEvent(ControlEvent theEvent) {
+//   if(theEvent.isAssignableFrom(Textfield.class)) {
+//     println("controlEvent: accessing a string from controller '"
+//             +theEvent.getName()+"': "
+//             +theEvent.getStringValue()
+//             );
+//     println("meow mix meow mix");
+//   }
+//}
+
+
+
 
 // public void conjureDropDown(){
 //
@@ -118,7 +142,7 @@ class AppDelegate extends Observable{
   private ArrayList<Button> buttons;
   private ArrayList<Scene> scenes;
   private Scene currentScene;
-  int width, height;
+  //int width, height;
 //contstructor
   AppDelegate(){
     super();
@@ -126,8 +150,8 @@ class AppDelegate extends Observable{
     scenes = new ArrayList<Scene>();
     buttons = new ArrayList<Button>();
     currentScene = null;
-    this.width = 400;
-    this.height = 600;
+    // this.width = 400;
+    // this.height = 600;
   }
   // String getRelationshipString(){
   //   return this.globalRelationship.getPreposition();
@@ -193,6 +217,12 @@ class AppDelegate extends Observable{
     for (Button b: buttons){
       b.draw();
     }
+  //ui bar
+
+  fill(0);
+  rectMode(CORNER);
+  rect(0,height-50,width,50);
+
   }
 
 }
@@ -273,7 +303,7 @@ private ArrayList<PhotoCapture> captures;
     if (key == 'e') println("working from list view");
   }
   public void clicked(){
-    println("clicked handeler");
+    //println("clicked handeler");
   }
 }
 class PhotoCapture implements ControlListener{
@@ -306,9 +336,8 @@ class PhotoCapture implements ControlListener{
     definedObjects.add(new UserDefinedObject("temp"));
   }
   public void setup(){
-    //app.addObserver(this);
-    //cp5 = new ControlP5(this);
-    //println("setup complete");
+    p5Controllers.addListener(this);
+
   }
 //getters and setters
   public PImage getImage(){
@@ -318,28 +347,34 @@ class PhotoCapture implements ControlListener{
     this.image = p;
   }
   public void keyPressed(){
+    if(key == 'l') conjureInputField();
     if(key == 'y') drawable = true;
     else drawable = false;
   }
   public void clicked(){
 
     for (int i = 0; i< definedObjects.size(); i++){
+
       if (isInsidePolygon(definedObjects.get(i).points,mouseX,mouseY)){
         //println("inside!!! from index: " + i );
-        //captures.add(captures.remove(0));
-        if(this.selectedObjects.size() < 1){
-            this.selectedObjects.add(definedObjects.get(i));
+        println(definedObjects.get(i).getTitle());
+        boolean tempIsDuplicate = false;
+        //println("photocapture printout " + this.selectedObjects);
+        if (!this.selectedObjects.isEmpty()){
+          for (UserDefinedObject u: this.selectedObjects){
+            if (definedObjects.get(i) == u){
+               tempIsDuplicate = true;
+               println("duplicate!");
+            }
+          }
+          if(!tempIsDuplicate) this.selectedObjects.add(definedObjects.get(i));
         }
-        // else{
-        //   this.selectedObjects.remove(0);
-        //   this.selectedObjects.add(definedObjects.get(i));
-        // }
-
-        println("photocapture printout " + this.selectedObjects);
-        if (this.selectedObjects.size() == 1){
+        else this.selectedObjects.add(definedObjects.get(i));
+        if (this.selectedObjects.size()  >=  2){
+            //println()
             conjureDropDown();
         }
-
+        //println(this.selectedObjects)
       }
     }
 
@@ -353,6 +388,8 @@ class PhotoCapture implements ControlListener{
   public void cleanImage(){
     definedObjects =  new ArrayList<UserDefinedObject>();
   }
+
+
   public void draw(){
     image(this.image,0,0);
     for (UserDefinedObject o : definedObjects){
@@ -361,28 +398,71 @@ class PhotoCapture implements ControlListener{
   }
 
   public void controlEvent(ControlEvent theEvent) {
-    println((int)theEvent.getValue());
-    int temp = ((int)theEvent.getValue());
+    //println((int)theEvent.getValue());
+    if(theEvent.isAssignableFrom(Textfield.class)) {
+    println("controlEvent: accessing a string from controller '"
+            +theEvent.getName()+"': "
+            +theEvent.getStringValue()
+            );
 
-    String rTemp;
-    switch(temp){
-      case 0: rTemp = "on top of";
-      break;
-      case 1: rTemp = "below";
-      break;
-      case 2: rTemp = "above";
-      break;
-      case 3: rTemp = "next to";
-      break;
-      case 4: rTemp = "behind";
-      break;
-      default: rTemp = "error";
-      break;
+    this.selectedObjects.get(this.selectedObjects.size()-1).setTitle(theEvent.getStringValue());
+    p5Controllers.remove("Input Object Name");
     }
-    //app.setRelationship(new Relationship(rTemp));
-    p5Controllers.remove("select relationship");
+    //************* code for list view *************
+    else{
+      int temp = ((int)theEvent.getValue());
+
+      String tempRelationship;
+      switch(temp){
+        case 0: tempRelationship = "on top of";
+        break;
+        case 1: tempRelationship = "below";
+        break;
+        case 2: tempRelationship = "above";
+        break;
+        case 3: tempRelationship = "next to";
+        break;
+        case 4: tempRelationship = "behind";
+        break;
+        case 5: tempRelationship = "inside of";
+        break;
+        default: tempRelationship = "error";
+        break;
+      }
+      println("tempRelationship: " + tempRelationship + " object 1: " + this.selectedObjects.get(this.selectedObjects.size()-1) +
+      "object 2: " + this.selectedObjects.get(this.selectedObjects.size()-2)
+      );
+
+      UserDefinedObject tempUDO1 = this.selectedObjects.get(this.selectedObjects.size()-1);
+      UserDefinedObject tempUDO2 = this.selectedObjects.get(this.selectedObjects.size()-2);
+
+      tempUDO1.relationships.add(new Relationship(tempRelationship,tempUDO2));
+
+      println(tempUDO1.relationships.get(tempUDO1.relationships.size()-1).getPreposition());
+      println(tempUDO1.relationships.get(tempUDO1.relationships.size()-1).getObject());
+      println(tempUDO1.relationships.get(tempUDO1.relationships.size()-1).getPrintout());
+      //println(this.selectedObjects.get(this.selectedObjects.size()-1).relationships.get(tempUDO1.relationships.size()-1).getPreposition());
+      //println(this.selectedObjects.get(this.selectedObjects.size()-1).relationships.get(tempUDO1.relationships.size()-1).getObject());
+
+
+      p5Controllers.remove("select relationship");
+    }
   }
 
+  public void conjureInputField(){
+    p5Controllers.addTextfield("Input Object Name")
+     .setCaptionLabel("set name for object")
+     .setPosition(20,height-40)
+     .setSize(200,20)
+     .setAutoClear(true)
+     ;
+    if (!this.selectedObjects.isEmpty()){
+        p5Controllers.getController("Input Object Name")
+        .setCaptionLabel("set name for object number: " + this.definedObjects.size());
+    }
+    //if(p5Controllers.getController("Input Object Name"))
+
+  }
   public void conjureDropDown(){
     List l = Arrays.asList("on top of", "below", "above", "next to", "behind","inside of");
     /* add a ScrollableList, by default it behaves like a DropdownList */
@@ -395,15 +475,15 @@ class PhotoCapture implements ControlListener{
        .close()
        // .setType(ScrollableList.LIST) // currently supported DROPDOWN and LIST
        ;
-    p5Controllers.addListener(this);
+
   }
 
 }
 //
 class Relationship{
 //members
-  String preposition;
-  UserDefinedObject object;
+  private String preposition;
+  private UserDefinedObject object;
 //constructors
   Relationship(){
     this.preposition = null;
@@ -433,6 +513,9 @@ class Relationship{
   }
   public void setObject(UserDefinedObject o){
     this.object = o;
+  }
+  public String getPrintout(){
+    return "this object is " + this.preposition + " " + this.object.getTitle();
   }
 }
 abstract class Scene{
@@ -560,6 +643,9 @@ class UserDefinedObject{
   public String getTitle(){
     return this.title;
   }
+  // void addRelationship(Relationship r){
+  //   this.relationships.add(r);
+  // }
   public void setTitle(String title){
     this.title = title;
   }
@@ -574,7 +660,7 @@ class UserDefinedObject{
           this.objectShape.vertex(p.x,p.y);
       }
       this.objectShape.endShape();
-      println("shape set");
+      //println("shape set");
   }
 
   public void draw(){
@@ -597,7 +683,7 @@ class UserDefinedObject{
   }
 
 }
-  public void settings() {  size(400,700);  pixelDensity(displayDensity()); }
+  public void settings() {  size(400,700); }
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "Final" };
     if (passedArgs != null) {

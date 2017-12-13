@@ -28,6 +28,9 @@ class UserDefinedObject{
   String getTitle(){
     return this.title;
   }
+  // void addRelationship(Relationship r){
+  //   this.relationships.add(r);
+  // }
   void setTitle(String title){
     this.title = title;
   }
@@ -42,7 +45,7 @@ class UserDefinedObject{
           this.objectShape.vertex(p.x,p.y);
       }
       this.objectShape.endShape();
-      println("shape set");
+      //println("shape set");
   }
 
   public void draw(){

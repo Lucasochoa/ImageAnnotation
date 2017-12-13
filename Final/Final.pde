@@ -2,16 +2,27 @@ import controlP5.*;
 import java.util.*;
 
 //ControlP5 cp5;
+//String textValue = "";
+
+
 AppDelegate app;
 PApplet publicApplet = this;
+
 //publicApplet = this;
 
 void setup(){
-  pixelDensity(displayDensity());
+  //pixelDensity(displayDensity());
   size(400,700);
 
   app = new AppDelegate();
   app.setup();
+
+
+  // cp5 = new ControlP5(this);
+  // cp5.addTextfield("Input Object Name")
+  //  .setPosition(20,height-40)
+  //  .setAutoClear(true)
+  //  ;
 
 
 }
@@ -30,6 +41,19 @@ void keyPressed() {
 void mousePressed() {
   app.clicked();
 }
+
+// void controlEvent(ControlEvent theEvent) {
+//   if(theEvent.isAssignableFrom(Textfield.class)) {
+//     println("controlEvent: accessing a string from controller '"
+//             +theEvent.getName()+"': "
+//             +theEvent.getStringValue()
+//             );
+//     println("meow mix meow mix");
+//   }
+//}
+
+
+
 
 // public void conjureDropDown(){
 //

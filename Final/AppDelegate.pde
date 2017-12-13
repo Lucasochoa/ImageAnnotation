@@ -3,7 +3,7 @@ class AppDelegate extends Observable{
   private ArrayList<Button> buttons;
   private ArrayList<Scene> scenes;
   private Scene currentScene;
-  int width, height;
+  //int width, height;
 //contstructor
   AppDelegate(){
     super();
@@ -11,8 +11,8 @@ class AppDelegate extends Observable{
     scenes = new ArrayList<Scene>();
     buttons = new ArrayList<Button>();
     currentScene = null;
-    this.width = 400;
-    this.height = 600;
+    // this.width = 400;
+    // this.height = 600;
   }
   // String getRelationshipString(){
   //   return this.globalRelationship.getPreposition();
@@ -78,6 +78,12 @@ class AppDelegate extends Observable{
     for (Button b: buttons){
       b.draw();
     }
+  //ui bar
+
+  fill(0);
+  rectMode(CORNER);
+  rect(0,height-50,width,50);
+
   }
 
 }

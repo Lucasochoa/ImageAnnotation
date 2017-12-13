@@ -40,6 +40,6 @@ private ArrayList<PhotoCapture> captures;
     if (key == 'e') println("working from list view");
   }
   void clicked(){
-    println("clicked handeler");
+    //println("clicked handeler");
   }
 }
