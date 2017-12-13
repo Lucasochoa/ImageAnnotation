@@ -47,7 +47,7 @@ class PhotoCapture implements Observer{
 
     for (int i = 0; i< definedObjects.size(); i++){
       if (isInsidePolygon(definedObjects.get(i).points,mouseX,mouseY)){
-        println("inside!!! from index: " + i );
+        //println("inside!!! from index: " + i );
         //captures.add(captures.remove(0));
         if(this.selectedObjects.size() < 1){
             this.selectedObjects.add(definedObjects.get(i));
