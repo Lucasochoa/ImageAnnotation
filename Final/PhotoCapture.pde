@@ -8,6 +8,7 @@ class PhotoCapture implements Observer{
 
 //constructors
   PhotoCapture(){
+    //PApplet app
     //this.controllers = new ControlP5();
     //super();
     this.drawable = false;
