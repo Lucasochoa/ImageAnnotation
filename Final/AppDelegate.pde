@@ -1,5 +1,5 @@
 class AppDelegate extends Observable{
-  private Relationship globalRelationship;
+  //private Relationship globalRelationship;
   private ArrayList<Button> buttons;
   private ArrayList<Scene> scenes;
   private Scene currentScene;
@@ -7,21 +7,21 @@ class AppDelegate extends Observable{
 //contstructor
   AppDelegate(){
     super();
-    globalRelationship = null;
+    //globalRelationship = null;
     scenes = new ArrayList<Scene>();
     buttons = new ArrayList<Button>();
     currentScene = null;
     this.width = 400;
     this.height = 600;
   }
-  String getRelationshipString(){
-    return this.globalRelationship.getPreposition();
-  }
-  void setRelationship(Relationship r){
-    this.globalRelationship = r;
-    setChanged();
-    notifyObservers();
-  }
+  // String getRelationshipString(){
+  //   return this.globalRelationship.getPreposition();
+  // }
+  // void setRelationship(Relationship r){
+  //   this.globalRelationship = r;
+  //   setChanged();
+  //   notifyObservers();
+  // }
 
    void addButton(int width,int height,int x,int y,String s){
     this.buttons.add(new Button(width,height,x,y,s));

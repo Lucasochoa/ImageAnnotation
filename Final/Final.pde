@@ -1,9 +1,10 @@
 import controlP5.*;
 import java.util.*;
 
-ControlP5 cp5;
+//ControlP5 cp5;
 AppDelegate app;
-
+PApplet publicApplet = this;
+//publicApplet = this;
 
 void setup(){
   pixelDensity(displayDensity());
@@ -13,8 +14,6 @@ void setup(){
   app.setup();
 
 
-
-  cp5 = new ControlP5(this);
 }
 
 void draw(){
@@ -23,7 +22,7 @@ void draw(){
 
 void keyPressed() {
   if(key == 't'){
-    println(app.getRelationshipString());
+    //println(app.getRelationshipString());
   }
   app.keyPressed();
 }
@@ -32,46 +31,48 @@ void mousePressed() {
   app.clicked();
 }
 
-public void conjureDropDown(){
+// public void conjureDropDown(){
+//
+//   List l = Arrays.asList("on top of", "below", "above", "next to", "behind","inside of");
+//   /* add a ScrollableList, by default it behaves like a DropdownList */
+//   cp5.addScrollableList("select relationship")
+//      .setPosition(width-200, 0)
+//      .setSize(200, 100)
+//      .setBarHeight(20)
+//      .setItemHeight(20)
+//      .addItems(l)
+//      .close()
+//      // .setType(ScrollableList.LIST) // currently supported DROPDOWN and LIST
+//      ;
+// }
 
-  List l = Arrays.asList("on top of", "below", "above", "next to", "behind");
-  /* add a ScrollableList, by default it behaves like a DropdownList */
-  cp5.addScrollableList("select relationship")
-     .setPosition(width-200, 0)
-     .setSize(200, 100)
-     .setBarHeight(20)
-     .setItemHeight(20)
-     .addItems(l)
-     .close()
-     // .setType(ScrollableList.LIST) // currently supported DROPDOWN and LIST
-     ;
-}
-void controlEvent(ControlEvent theEvent) {
-  //println(theEvent);
-  //println(theEvent.getLabel());
-  println((int)theEvent.getValue());
-  int temp = ((int)theEvent.getValue());
-  // if (theEvent.isGroup()) {
-  //   println(theEvent.getGroup() + " => " + theEvent.getGroup().getValue());
 
-  String rTemp;
-  switch(temp){
-    case 0: rTemp = "on top of";
-    break;
-    case 1: rTemp = "below";
-    break;
-    case 2: rTemp = "above";
-    break;
-    case 3: rTemp = "next to";
-    break;
-    case 4: rTemp = "behind";
-    break;
-    default: rTemp = "error";
-    break;
-  }
-  app.setRelationship(new Relationship(rTemp));
-  cp5.remove("select relationship");
-}
+// void controlEvent(ControlEvent theEvent) {
+//   //println(theEvent);
+//   //println(theEvent.getLabel());
+//   println((int)theEvent.getValue());
+//   int temp = ((int)theEvent.getValue());
+//   // if (theEvent.isGroup()) {
+//   //   println(theEvent.getGroup() + " => " + theEvent.getGroup().getValue());
+//
+//   String rTemp;
+//   switch(temp){
+//     case 0: rTemp = "on top of";
+//     break;
+//     case 1: rTemp = "below";
+//     break;
+//     case 2: rTemp = "above";
+//     break;
+//     case 3: rTemp = "next to";
+//     break;
+//     case 4: rTemp = "behind";
+//     break;
+//     default: rTemp = "error";
+//     break;
+//   }
+//   app.setRelationship(new Relationship(rTemp));
+//   cp5.remove("select relationship");
+// }
 
 
 

@@ -1,5 +1,5 @@
-class PhotoCapture implements Observer{
-  //private ControlP5 controllers;
+class PhotoCapture implements ControlListener{
+  private ControlP5 p5Controllers;
   private boolean drawable;
   private String name;
   private PImage image;
@@ -9,7 +9,7 @@ class PhotoCapture implements Observer{
 //constructors
   PhotoCapture(){
     //PApplet app
-    //this.controllers = new ControlP5();
+    this.p5Controllers = new ControlP5(publicApplet);
     //super();
     this.drawable = false;
     this.image = null;
@@ -19,7 +19,7 @@ class PhotoCapture implements Observer{
   }
   PhotoCapture(PImage p){
     //super();
-    //this.controllers = new ControlP5();
+    this.p5Controllers = new ControlP5(publicApplet);
     this.drawable = false;
     this.image = p;
     this.name = "empty name";
@@ -28,7 +28,7 @@ class PhotoCapture implements Observer{
     definedObjects.add(new UserDefinedObject("temp"));
   }
   void setup(){
-    app.addObserver(this);
+    //app.addObserver(this);
     //cp5 = new ControlP5(this);
     //println("setup complete");
   }
@@ -81,10 +81,43 @@ class PhotoCapture implements Observer{
       o.draw();
     }
   }
-  void update(Observable obs, Object obj){
-    println("updating from observer");
-    println(this.selectedObjects);
-    println(app.getRelationshipString());
+
+  public void controlEvent(ControlEvent theEvent) {
+    println((int)theEvent.getValue());
+    int temp = ((int)theEvent.getValue());
+
+    String rTemp;
+    switch(temp){
+      case 0: rTemp = "on top of";
+      break;
+      case 1: rTemp = "below";
+      break;
+      case 2: rTemp = "above";
+      break;
+      case 3: rTemp = "next to";
+      break;
+      case 4: rTemp = "behind";
+      break;
+      default: rTemp = "error";
+      break;
+    }
+    //app.setRelationship(new Relationship(rTemp));
+    p5Controllers.remove("select relationship");
+  }
+
+  void conjureDropDown(){
+    List l = Arrays.asList("on top of", "below", "above", "next to", "behind","inside of");
+    /* add a ScrollableList, by default it behaves like a DropdownList */
+    p5Controllers.addScrollableList("select relationship")
+       .setPosition(width-200, 0)
+       .setSize(200, 100)
+       .setBarHeight(20)
+       .setItemHeight(20)
+       .addItems(l)
+       .close()
+       // .setType(ScrollableList.LIST) // currently supported DROPDOWN and LIST
+       ;
+    p5Controllers.addListener(this);
   }
 
 }

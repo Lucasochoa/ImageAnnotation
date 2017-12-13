@@ -20,9 +20,10 @@ public class Final extends PApplet {
 
 
 
-ControlP5 cp5;
+//ControlP5 cp5;
 AppDelegate app;
-
+PApplet publicApplet = this;
+//publicApplet = this;
 
 public void setup(){
   
@@ -32,8 +33,6 @@ public void setup(){
   app.setup();
 
 
-
-  cp5 = new ControlP5(this);
 }
 
 public void draw(){
@@ -42,7 +41,7 @@ public void draw(){
 
 public void keyPressed() {
   if(key == 't'){
-    println(app.getRelationshipString());
+    //println(app.getRelationshipString());
   }
   app.keyPressed();
 }
@@ -51,46 +50,48 @@ public void mousePressed() {
   app.clicked();
 }
 
-public void conjureDropDown(){
+// public void conjureDropDown(){
+//
+//   List l = Arrays.asList("on top of", "below", "above", "next to", "behind","inside of");
+//   /* add a ScrollableList, by default it behaves like a DropdownList */
+//   cp5.addScrollableList("select relationship")
+//      .setPosition(width-200, 0)
+//      .setSize(200, 100)
+//      .setBarHeight(20)
+//      .setItemHeight(20)
+//      .addItems(l)
+//      .close()
+//      // .setType(ScrollableList.LIST) // currently supported DROPDOWN and LIST
+//      ;
+// }
 
-  List l = Arrays.asList("on top of", "below", "above", "next to", "behind");
-  /* add a ScrollableList, by default it behaves like a DropdownList */
-  cp5.addScrollableList("select relationship")
-     .setPosition(width-200, 0)
-     .setSize(200, 100)
-     .setBarHeight(20)
-     .setItemHeight(20)
-     .addItems(l)
-     .close()
-     // .setType(ScrollableList.LIST) // currently supported DROPDOWN and LIST
-     ;
-}
-public void controlEvent(ControlEvent theEvent) {
-  //println(theEvent);
-  //println(theEvent.getLabel());
-  println((int)theEvent.getValue());
-  int temp = ((int)theEvent.getValue());
-  // if (theEvent.isGroup()) {
-  //   println(theEvent.getGroup() + " => " + theEvent.getGroup().getValue());
 
-  String rTemp;
-  switch(temp){
-    case 0: rTemp = "on top of";
-    break;
-    case 1: rTemp = "below";
-    break;
-    case 2: rTemp = "above";
-    break;
-    case 3: rTemp = "next to";
-    break;
-    case 4: rTemp = "behind";
-    break;
-    default: rTemp = "error";
-    break;
-  }
-  app.setRelationship(new Relationship(rTemp));
-  cp5.remove("select relationship");
-}
+// void controlEvent(ControlEvent theEvent) {
+//   //println(theEvent);
+//   //println(theEvent.getLabel());
+//   println((int)theEvent.getValue());
+//   int temp = ((int)theEvent.getValue());
+//   // if (theEvent.isGroup()) {
+//   //   println(theEvent.getGroup() + " => " + theEvent.getGroup().getValue());
+//
+//   String rTemp;
+//   switch(temp){
+//     case 0: rTemp = "on top of";
+//     break;
+//     case 1: rTemp = "below";
+//     break;
+//     case 2: rTemp = "above";
+//     break;
+//     case 3: rTemp = "next to";
+//     break;
+//     case 4: rTemp = "behind";
+//     break;
+//     default: rTemp = "error";
+//     break;
+//   }
+//   app.setRelationship(new Relationship(rTemp));
+//   cp5.remove("select relationship");
+// }
 
 
 
@@ -113,7 +114,7 @@ public void controlEvent(ControlEvent theEvent) {
 //   cp5.get(ScrollableList.class, "dropdown").setType(ControlP5.DROPDOWN);
 // }
 class AppDelegate extends Observable{
-  private Relationship globalRelationship;
+  //private Relationship globalRelationship;
   private ArrayList<Button> buttons;
   private ArrayList<Scene> scenes;
   private Scene currentScene;
@@ -121,21 +122,21 @@ class AppDelegate extends Observable{
 //contstructor
   AppDelegate(){
     super();
-    globalRelationship = null;
+    //globalRelationship = null;
     scenes = new ArrayList<Scene>();
     buttons = new ArrayList<Button>();
     currentScene = null;
     this.width = 400;
     this.height = 600;
   }
-  public String getRelationshipString(){
-    return this.globalRelationship.getPreposition();
-  }
-  public void setRelationship(Relationship r){
-    this.globalRelationship = r;
-    setChanged();
-    notifyObservers();
-  }
+  // String getRelationshipString(){
+  //   return this.globalRelationship.getPreposition();
+  // }
+  // void setRelationship(Relationship r){
+  //   this.globalRelationship = r;
+  //   setChanged();
+  //   notifyObservers();
+  // }
 
    public void addButton(int width,int height,int x,int y,String s){
     this.buttons.add(new Button(width,height,x,y,s));
@@ -242,8 +243,8 @@ private ArrayList<PhotoCapture> captures;
   }
 
   public void setup(){
-    println("setting up from listView Scene");
   }
+
   public void draw(){
     PhotoCapture selectedCapture = captures.get(captures.size()-1);
     int padding = 20;
@@ -275,8 +276,8 @@ private ArrayList<PhotoCapture> captures;
     println("clicked handeler");
   }
 }
-class PhotoCapture implements Observer{
-  //private ControlP5 controllers;
+class PhotoCapture implements ControlListener{
+  private ControlP5 p5Controllers;
   private boolean drawable;
   private String name;
   private PImage image;
@@ -286,7 +287,7 @@ class PhotoCapture implements Observer{
 //constructors
   PhotoCapture(){
     //PApplet app
-    //this.controllers = new ControlP5();
+    this.p5Controllers = new ControlP5(publicApplet);
     //super();
     this.drawable = false;
     this.image = null;
@@ -296,7 +297,7 @@ class PhotoCapture implements Observer{
   }
   PhotoCapture(PImage p){
     //super();
-    //this.controllers = new ControlP5();
+    this.p5Controllers = new ControlP5(publicApplet);
     this.drawable = false;
     this.image = p;
     this.name = "empty name";
@@ -305,7 +306,7 @@ class PhotoCapture implements Observer{
     definedObjects.add(new UserDefinedObject("temp"));
   }
   public void setup(){
-    app.addObserver(this);
+    //app.addObserver(this);
     //cp5 = new ControlP5(this);
     //println("setup complete");
   }
@@ -324,7 +325,7 @@ class PhotoCapture implements Observer{
 
     for (int i = 0; i< definedObjects.size(); i++){
       if (isInsidePolygon(definedObjects.get(i).points,mouseX,mouseY)){
-        println("inside!!! from index: " + i );
+        //println("inside!!! from index: " + i );
         //captures.add(captures.remove(0));
         if(this.selectedObjects.size() < 1){
             this.selectedObjects.add(definedObjects.get(i));
@@ -358,10 +359,43 @@ class PhotoCapture implements Observer{
       o.draw();
     }
   }
-  public void update(Observable obs, Object obj){
-    println("updating from observer");
-    println(this.selectedObjects);
-    println(app.getRelationshipString());
+
+  public void controlEvent(ControlEvent theEvent) {
+    println((int)theEvent.getValue());
+    int temp = ((int)theEvent.getValue());
+
+    String rTemp;
+    switch(temp){
+      case 0: rTemp = "on top of";
+      break;
+      case 1: rTemp = "below";
+      break;
+      case 2: rTemp = "above";
+      break;
+      case 3: rTemp = "next to";
+      break;
+      case 4: rTemp = "behind";
+      break;
+      default: rTemp = "error";
+      break;
+    }
+    //app.setRelationship(new Relationship(rTemp));
+    p5Controllers.remove("select relationship");
+  }
+
+  public void conjureDropDown(){
+    List l = Arrays.asList("on top of", "below", "above", "next to", "behind","inside of");
+    /* add a ScrollableList, by default it behaves like a DropdownList */
+    p5Controllers.addScrollableList("select relationship")
+       .setPosition(width-200, 0)
+       .setSize(200, 100)
+       .setBarHeight(20)
+       .setItemHeight(20)
+       .addItems(l)
+       .close()
+       // .setType(ScrollableList.LIST) // currently supported DROPDOWN and LIST
+       ;
+    p5Controllers.addListener(this);
   }
 
 }

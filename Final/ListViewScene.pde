@@ -10,8 +10,8 @@ private ArrayList<PhotoCapture> captures;
   }
 
   void setup(){
-    println("setting up from listView Scene");
   }
+
   void draw(){
     PhotoCapture selectedCapture = captures.get(captures.size()-1);
     int padding = 20;
