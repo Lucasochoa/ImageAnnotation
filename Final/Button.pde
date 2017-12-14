@@ -15,9 +15,12 @@ String getName(){
   return this.name;
 }
 protected void draw(){
-  fill(color(255,0,0));
-  rectMode(CENTER);
+  fill(color(255));
+  rectMode(CORNER);
   rect(this.x,this.y,this.width,this.height);
+  fill(0);
+  textSize(12);
+  text("mode",337,680);
 }
 
 protected boolean isOver(int mx, int my){

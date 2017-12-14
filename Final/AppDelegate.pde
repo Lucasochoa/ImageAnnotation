@@ -3,6 +3,7 @@ class AppDelegate extends Observable{
   private ArrayList<Button> buttons;
   private ArrayList<Scene> scenes;
   private Scene currentScene;
+  private ListViewScene listScene;
   //int width, height;
 //contstructor
   AppDelegate(){
@@ -34,7 +35,17 @@ class AppDelegate extends Observable{
       if (b.isButtonClicked()){
           if (b.getName() == "right"){
             scenes.add(scenes.remove(0));
+
             println("clicking from right");
+            Scene tempScene = scenes.get(scenes.size()-1);
+
+            if(tempScene instanceof ListViewScene){
+              tempScene.show();
+            }
+            else{
+              this.listScene.hideController();
+            }
+
           }
           if (b.getName() == "left") println("clicking from left");
           break;
@@ -58,15 +69,13 @@ class AppDelegate extends Observable{
     SelectionPage selectPage = new SelectionPage();
     selectPage.setup();
 
-    ListViewScene listViewPage = new ListViewScene(selectPage.getPhotoCaptures()); //temp
+    this.listScene = new ListViewScene(selectPage.getPhotoCaptures()); //temp
+    this.listScene.setup();
 
-    scenes.add(listViewPage);
+    scenes.add(this.listScene);
     scenes.add(selectPage);
 
-
-    //control setup
-    this.addButton(50,50,50,50,"left");
-    this.addButton(50,50,110,50,"right");
+    this.addButton(50,30,width-70,height-40,"right");
   }
 
   void draw(){
@@ -75,14 +84,16 @@ class AppDelegate extends Observable{
     // }
     scenes.get(scenes.size()-1).draw();
 
-    for (Button b: buttons){
-      b.draw();
-    }
+
   //ui bar
 
   fill(0);
   rectMode(CORNER);
   rect(0,height-50,width,50);
+
+  for (Button b: buttons){
+    b.draw();
+  }
 
   }
 

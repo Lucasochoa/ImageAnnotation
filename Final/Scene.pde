@@ -6,5 +6,7 @@ private int index;
   abstract void draw();
   abstract void keyPressed();
   abstract void clicked();
+  abstract void show();
+  abstract void hideController();
 
 }

@@ -39,7 +39,7 @@ private PhotoCapture currentCapture;
       UserDefinedObject tempObject = new UserDefinedObject("temporary object");
       relationships.add(new Relationship(" on top of ", tempObject));
       //temp
-      captures.get(captures.size()-1).definedObjects.add(new UserDefinedObject("henry",relationships));
+      captures.get(captures.size()-1).definedObjects.add(new UserDefinedObject("new unlabeled object"));
       println("new object added to shown capture");
     }
     if (key == CODED){
@@ -49,6 +49,14 @@ private PhotoCapture currentCapture;
 
     captures.get(captures.size()-1).keyPressed();
 
+  }
+  void addNewObject(){
+    ArrayList<Relationship> relationships = new ArrayList<Relationship>();
+    UserDefinedObject tempObject = new UserDefinedObject("temporary object");
+    relationships.add(new Relationship(" on top of ", tempObject));
+    //temp
+    captures.get(captures.size()-1).definedObjects.add(new UserDefinedObject("new unlabeled object"));
+    println("new object added to shown capture");
   }
 
   void clicked(){
@@ -68,6 +76,12 @@ private PhotoCapture currentCapture;
 
   void draw(){
     captures.get(captures.size()-1).draw();
+  }
+  void show(){
+    //do something
+  }
+  void hideController(){
+    //doSomething
   }
 }
 

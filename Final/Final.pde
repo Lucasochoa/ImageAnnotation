@@ -3,12 +3,8 @@ import java.util.*;
 
 //ControlP5 cp5;
 //String textValue = "";
-
-
 AppDelegate app;
 PApplet publicApplet = this;
-
-//publicApplet = this;
 
 void setup(){
   //pixelDensity(displayDensity());

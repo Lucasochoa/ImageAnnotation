@@ -96,8 +96,10 @@ class PhotoCapture implements ControlListener{
             +theEvent.getName()+"': "
             +theEvent.getStringValue()
             );
+    if(!this.selectedObjects.isEmpty()){
+        this.selectedObjects.get(this.selectedObjects.size()-1).setTitle(theEvent.getStringValue());
+    }
 
-    this.selectedObjects.get(this.selectedObjects.size()-1).setTitle(theEvent.getStringValue());
     p5Controllers.remove("Input Object Name");
     }
     //************* code for list view *************
@@ -121,15 +123,17 @@ class PhotoCapture implements ControlListener{
         default: tempRelationship = "error";
         break;
       }
-      println("tempRelationship: " + tempRelationship + " object 1: " + this.selectedObjects.get(this.selectedObjects.size()-1) +
-      "object 2: " + this.selectedObjects.get(this.selectedObjects.size()-2)
-      );
-
-      UserDefinedObject tempUDO1 = this.selectedObjects.get(this.selectedObjects.size()-1);
-      UserDefinedObject tempUDO2 = this.selectedObjects.get(this.selectedObjects.size()-2);
+      
+      UserDefinedObject tempUDO1 = this.selectedObjects.get(this.selectedObjects.size()-2);
+      UserDefinedObject tempUDO2 = this.selectedObjects.get(this.selectedObjects.size()-1);
 
       tempUDO1.relationships.add(new Relationship(tempRelationship,tempUDO2));
 
+
+
+      println("tempRelationship: " + tempRelationship + " object 1: " + this.selectedObjects.get(this.selectedObjects.size()-1) +
+      "object 2: " + this.selectedObjects.get(this.selectedObjects.size()-2)
+      );
       println(tempUDO1.relationships.get(tempUDO1.relationships.size()-1).getPreposition());
       println(tempUDO1.relationships.get(tempUDO1.relationships.size()-1).getObject());
       println(tempUDO1.relationships.get(tempUDO1.relationships.size()-1).getPrintout());
